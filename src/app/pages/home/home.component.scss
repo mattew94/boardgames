@@ -1,0 +1,31 @@
+.container-hero {
+  position: relative;
+}
+.hero-section {
+  background: url("../../../assets/hero-section.webp");
+  height: calc(100vh - 100px);
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  filter: brightness(40%);
+}
+
+.btn-cta {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px 50px;
+  font-size: 2rem;
+  letter-spacing: 10px;
+  border-radius: 10px;
+  border: 2px solid white;
+}
+
+@media only screen and (max-width: 600px) {
+  .btn-cta {
+    padding: 10px 20px;
+    font-size: 0.75rem;
+    letter-spacing: 5px;
+  }
+}
