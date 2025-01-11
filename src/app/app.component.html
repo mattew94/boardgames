@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark pe-4">
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 640 512"
@@ -24,7 +24,7 @@
   </button>
 
   <div
-    class="collapse navbar-collapse justify-content-around"
+    class="collapse navbar-collapse ps-4"
     id="navbarColor01"
   >
     <ul class="navbar-nav mr-auto">
@@ -32,7 +32,7 @@
         <a class="nav-link" routerLink="/home">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/list">Liste</a>
+        <a class="nav-link" routerLink="/user-list">Utenti</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="/prova">Programma Evento</a>
@@ -41,17 +41,6 @@
         <a class="nav-link" routerLink="/prova">Classifiche</a>
       </li>
     </ul>
-    <form class="d-flex">
-      <input
-        class="form-control me-2"
-        type="search"
-        placeholder="Search"
-        aria-label="Search"
-      />
-      <button class="btn btn-outline-info my-2 my-sm-0" type="submit">
-        Search
-      </button>
-    </form>
   </div>
 </nav>
 <router-outlet></router-outlet>

@@ -1,6 +1,21 @@
-<div class="m-4">
-  <div class="container-hero">
+<div>
+  <div class="container-hero mb-0 mb-md-4">
     <div class="hero-section"></div>
-    <div class="btn btn-dark btn-cta">SCOPRI ORA</div>
+  </div>
+  <div class="d-flex flex-column flex-md-row p-4">
+    <div class="p-3 p-md-5 d-flex flex-column align-items-center card bg-cards text-white mb-4 me-0 me-md-2">
+      <h2>Lista utenti</h2>
+      <p>Hai presente quando perdi ore a ricordare chi ha il gioco perfetto per la serata? 
+        Problema risolto! Qui trovi la lista dei nostri giochi e pure quella degli amici. 
+        Finalmente niente più “chi aveva Dixit?”!</p>
+        <span class="btn btn-light" (click)="goTo('utenti')">SCOPRI</span>
+    </div>
+    <div class="p-4 p-md-5 d-flex flex-column align-items-center card bg-cards text-white mb-4 me-0 ms-md-2">
+      <h2>Classifiche</h2>
+      <p>Ogni partita conta, e ora anche i punteggi! Qui terrà traccia di chi domina il tavolo
+         e chi deve ancora capire le regole. Attenzione: i campioni si vantano, ma gli ultimi? 
+         Si rifanno alla prossima… forse!</p>
+       <span class="btn btn-light" (click)="goTo('classifiche')">SCOPRI</span>
+    </div>
   </div>
 </div>

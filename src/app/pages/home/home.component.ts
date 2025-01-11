@@ -14,12 +14,15 @@ export class HomeComponent implements OnInit {
   constructor(private userService: UserService) {}
 
   ngOnInit() {
-    console.log('rpaspdnmaksdms');
-    
     this.userService.getUsers().subscribe((data) => {
       console.log(data);
       
       this.users = data;
     });
+  }
+
+  goTo(path: string) {
+    console.log(path);
+    
   }
 }
