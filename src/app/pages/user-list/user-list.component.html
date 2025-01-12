@@ -1,3 +1,19 @@
-<p>
-  game-list works!
-</p>
+<div class="container mt-5">
+  @if(users()[0]?.utenti.length) {
+    @for(user of users()[0].utenti; track $index) {
+      <div class="user-container mb-5 relative">
+        <div class="d-flex h-100" (click)="openDropdownUser($index)">
+          <div class="bg-primary border-bg-left"></div>
+          <p class="ps-3 d-flex m-0 align-items-center user-name">{{ user.name }}</p>
+        </div>
+        <div [class]="'absolute user-'+$index" [ngClass]="isOpenUserDropdown[$index] ? 'd-block' : 'd-none'">
+          <ul>
+            @for(game of user.games; track $index) {
+              <li>{{ game.name}}</li>
+            }
+          </ul>
+        </div>
+      </div>
+    }
+  }
+</div>

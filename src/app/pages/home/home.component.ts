@@ -1,28 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   standalone: true,
   styleUrls: ['./home.component.scss'],
-  providers: [UserService],
 })
-export class HomeComponent implements OnInit {
-  users: any[] = [];
+export class HomeComponent {
+  
+  #router = inject(Router)
 
-  constructor(private userService: UserService) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.userService.getUsers().subscribe((data) => {
-      console.log(data);
-      
-      this.users = data;
-    });
-  }
+
 
   goTo(path: string) {
-    console.log(path);
-    
+    this.#router.navigate([path])    
   }
 }
