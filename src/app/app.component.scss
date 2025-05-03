@@ -1,1 +1,16 @@
 
+.collapse-container {
+    position: absolute;
+    top: 72px;
+    left:0;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    .collapse-navbar {
+        height: 100%
+    }
+}
+
+.container-avatar {
+    cursor: pointer
+}

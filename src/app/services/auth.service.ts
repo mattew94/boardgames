@@ -5,7 +5,7 @@ import { doc, getDocs, QuerySnapshot } from 'firebase/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  _isLoggedIn = signal(false);
+  _isLoggedIn = signal(!!localStorage.getItem('user'));
 
   get isLoggedIn() {
     return this._isLoggedIn()
@@ -36,6 +36,8 @@ export class AuthService {
 
     getCurrentUser(): any | null {
       const userJson = localStorage.getItem('user');
+      console.log(userJson ? JSON.parse(userJson) : null);
+      
       return userJson ? JSON.parse(userJson) : null;
     }
 }

@@ -11,20 +11,70 @@
       d="M192 64C86 64 0 150 0 256S86 448 192 448l256 0c106 0 192-86 192-192s-86-192-192-192L192 64zM496 168a40 40 0 1 1 0 80 40 40 0 1 1 0-80zM392 304a40 40 0 1 1 80 0 40 40 0 1 1 -80 0zM168 200c0-13.3 10.7-24 24-24s24 10.7 24 24l0 32 32 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-32 0 0 32c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-32-32 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l32 0 0-32z"
     />
   </svg>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarColor01"
-    aria-controls="navbarColor01"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
+
+  <div class="pos-f-t">
+    <!-- Navbar Toggler Button -->
+    <nav class="navbar navbar-dark bg-dark">
+      @if(authService.isLoggedIn) {
+        <div class="d-flex align-items-center text-white gap-2 pe-4 d-block d-lg-none container-avatar" (click)="goTo('profilo')">
+          <img
+          [src]="'https://ui-avatars.com/api/?name=' + username + '&background=495fff&color=fff&rounded=true'"
+            class="rounded-circle"
+            width="32"
+            height="32"
+            alt="Avatar"
+          />
+          <span class=" d-sm-inline" >{{ username }}</span>
+        </div>
+      }
+      <button
+        class="navbar-toggler"
+        type="button"
+        (click)="isCollapsed = !isCollapsed"
+        aria-controls="navbarToggleExternalContent"
+        [attr.aria-expanded]="!isCollapsed"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+    </nav>
+
+    
+  
+    <!-- Contenuto Collassabile -->
+    <div class="collapse collapse-container" [ngClass]="{'show': !isCollapsed}" id="navbarToggleExternalContent">
+      <div class="collapse-navbar bg-dark p-4">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active" (click)="isCollapsed = true">
+            <a class="nav-link" routerLink="/home">Home</a>
+          </li>
+          @if(authService.isLoggedIn) {
+            <li class="nav-item" (click)="isCollapsed = true">
+              <a class="nav-link" routerLink="/utenti">Utenti</a>
+            </li>
+            <li class="nav-item" (click)="isCollapsed = true">
+              <a class="nav-link" routerLink="/prova">Programma Evento</a>
+            </li>
+            <li class="nav-item" (click)="isCollapsed = true">
+              <a class="nav-link" routerLink="/prova">Classifiche</a>
+            </li>
+          } @else {
+            <li class="nav-item" (click)="isCollapsed = true">
+              <a class="nav-link" routerLink="/login">Log In</a>
+            </li>
+          }
+        </ul>
+       
+      </div>
+
+      
+    </div>
+  </div>
 
   <div
-    class="collapse navbar-collapse ps-4"
+    class="collapse navbar-collapse ps-4 justify-content-between"
     id="navbarColor01"
   >
     <ul class="navbar-nav mr-auto">
@@ -47,6 +97,18 @@
         </li>
       }
     </ul>
+    @if(authService.isLoggedIn) {
+      <div class="d-flex align-items-center text-white gap-2 container-avatar" (click)="goTo('profilo')">
+        <img
+          [src]="'https://ui-avatars.com/api/?name=' + username + '&background=495fff&color=fff&rounded=true'"
+          class="rounded-circle"
+          width="32"
+          height="32"
+          alt="Avatar"
+        />
+        <span class="d-sm-inline">{{ username }}</span>
+      </div>
+    }
   </div>
 </nav>
 <router-outlet></router-outlet>
