@@ -1,11 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 import { Firestore, collectionData, collection, query, where, docData } from '@angular/fire/firestore';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { doc, getDocs, QuerySnapshot } from 'firebase/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   _isLoggedIn = signal(!!localStorage.getItem('user'));
+  username = new BehaviorSubject(localStorage.getItem('user')?.slice(1,-1))
 
   get isLoggedIn() {
     return this._isLoggedIn()
@@ -25,7 +26,8 @@ export class AuthService {
           return data.utenti.some((user: any) =>
             {
               if(user.username === username && user.password === password) {
-                this.isLoggedIn = true                
+                this.isLoggedIn = true  
+                this.username.next(user.username);             
               }
               return user.username === username && user.password === password
             }
