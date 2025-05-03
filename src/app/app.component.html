@@ -31,15 +31,21 @@
       <li class="nav-item active">
         <a class="nav-link" routerLink="/home">Home</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/utenti">Utenti</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/prova">Programma Evento</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/prova">Classifiche</a>
-      </li>
+      @if(authService.isLoggedIn) {
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/utenti">Utenti</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/prova">Programma Evento</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/prova">Classifiche</a>
+        </li>
+      } @else {
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login">Log In</a>
+        </li>
+      }
     </ul>
   </div>
 </nav>

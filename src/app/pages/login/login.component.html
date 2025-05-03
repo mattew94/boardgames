@@ -1,0 +1,15 @@
+<div class="login-container animate-in">
+  <h1 class="title">Benvenuto 🎲</h1>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <label for="username">Nome utente</label>
+    <input id="username" formControlName="username" type="text" />
+
+    <label for="password">Password</label>
+    <input id="password" formControlName="password" type="password" />
+
+    <button type="submit" [disabled]="!loginForm.valid">Accedi</button>
+  </form>
+
+  <p class="note">Unisciti agli amici per una nuova partita!</p>
+</div>

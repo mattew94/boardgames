@@ -3,19 +3,33 @@
     <div class="hero-section"></div>
   </div>
   <div class="d-flex flex-column flex-md-row p-4">
-    <div class="p-3 p-md-5 d-flex flex-column align-items-center card bg-cards text-white mb-4 me-0 me-md-2">
-      <h2>Lista utenti</h2>
-      <p>Hai presente quando perdi ore a ricordare chi ha il gioco perfetto per la serata? 
-        Problema risolto! Qui trovi la lista dei nostri giochi e pure quella degli amici. 
-        Finalmente niente più “chi aveva Dixit?”!</p>
-        <span class="btn btn-light" (click)="goTo('utenti')">SCOPRI</span>
-    </div>
-    <div class="p-4 p-md-5 d-flex flex-column align-items-center card bg-cards text-white mb-4 me-0 ms-md-2">
-      <h2>Classifiche</h2>
-      <p>Ogni partita conta, e ora anche i punteggi! Qui terrà traccia di chi domina il tavolo
-         e chi deve ancora capire le regole. Attenzione: i campioni si vantano, ma gli ultimi? 
-         Si rifanno alla prossima… forse!</p>
-       <span class="btn btn-light" (click)="goTo('classifiche')">SCOPRI</span>
-    </div>
+    @if(authService.isLoggedIn) {
+      <div class="p-3 p-md-5 d-flex flex-column align-items-center card bg-cards text-white mb-4 me-0 me-md-2">
+        <h2>Lista utenti</h2>
+        <p>Hai presente quando perdi ore a ricordare chi ha il gioco perfetto per la serata? 
+          Problema risolto! Qui trovi la lista dei nostri giochi e pure quella degli amici. 
+          Finalmente niente più “chi aveva Dixit?”!</p>
+          <span class="btn btn-light" (click)="goTo('utenti')">SCOPRI</span>
+      </div>
+      <div class="p-4 p-md-5 d-flex flex-column align-items-center card bg-cards text-white mb-4 me-0 ms-md-2">
+        <h2>Classifiche</h2>
+        <p>Ogni partita conta, e ora anche i punteggi! Qui terrà traccia di chi domina il tavolo
+           e chi deve ancora capire le regole. Attenzione: i campioni si vantano, ma gli ultimi? 
+           Si rifanno alla prossima… forse!</p>
+         <span class="btn btn-light" (click)="goTo('classifiche')">SCOPRI</span>
+      </div>
+    } @else {
+      <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4 p-4 p-md-5 d-flex flex-column align-items-center card bg-cards text-white mb-4 me-0 ms-md-2">
+          <h2>Effettua l'accesso</h2>
+          <p>Accedi con il tuo nome utente per entrare nel fantastico mondo dei giochi da tavolo con gli amici! 🎲 
+            Qui puoi organizzare sfide epiche, tenere traccia dei punteggi e sfidare i tuoi amici in ogni partita. È facile e veloce! </p>
+           <span class="btn btn-light" (click)="goTo('login')">ACCEDI</span>
+        </div>
+        <div class="col-4"></div>
+
+      </div>
+    }
   </div>
 </div>
