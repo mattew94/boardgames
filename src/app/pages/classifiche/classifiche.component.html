@@ -1,0 +1,123 @@
+<div class="container mt-5">
+  <h2>Classifiche</h2>
+
+  <!-- Sezione 1: Partite giocate -->
+  <div class="accordion mb-4" id="accordionPartite">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingPartite">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartite" aria-expanded="true" aria-controls="collapsePartite">
+          Partite giocate
+        </button>
+      </h2>
+      <div id="collapsePartite" class="accordion-collapse collapse show" aria-labelledby="headingPartite" data-bs-parent="#accordionPartite">
+        <div class="accordion-body">
+
+          <!-- Selezione gioco + bottone -->
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <select class="form-select w-auto" [(ngModel)]="giocoSelezionato">
+              <option value="" disabled selected>Seleziona un gioco</option>
+              <option *ngFor="let gioco of giochiDisponibili" [value]="gioco">{{ gioco }}</option>
+            </select>
+
+            <button class="btn btn-primary" [disabled]="!giocoSelezionato" data-bs-toggle="offcanvas" data-bs-target="#drawerPartita">
+              Aggiungi Partita
+            </button>
+          </div>
+
+          <!-- Tabella partite -->
+          <div class="table-responsive" *ngIf="partitePerGioco.length > 0; else nessunaPartita">
+            <table class="table table-bordered table-striped">
+              <thead class="table-dark">
+                <tr>
+                  <th>Partecipanti</th>
+                  <th>Vincitore</th>
+                  <th>Tempo di gioco (min)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let partita of partitePerGioco">
+                  <td>{{ partita.partecipanti.join(' - ') }}</td>
+                  <td>{{ partita.vincitore }}</td>
+                  <td>{{ partita.tempo }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ng-template #nessunaPartita>
+            <p class="text-muted">Nessuna partita registrata per questo gioco.</p>
+          </ng-template>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sezione 2: Classifica -->
+  <div class="accordion" id="accordionClassifica">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingClassifica">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseClassifica" aria-expanded="true" aria-controls="collapseClassifica">
+          Classifica Generale
+        </button>
+      </h2>
+      <div id="collapseClassifica" class="accordion-collapse collapse show" aria-labelledby="headingClassifica" data-bs-parent="#accordionClassifica">
+        <div class="accordion-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>#</th>
+                  <th>Nome</th>
+                  <th>Vittorie</th>
+                  <th>Partite Giocate</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of classifica; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.nome }}</td>
+                  <td>{{ item.vittorie }}</td>
+                  <td>{{ item.giocate }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Drawer per inserimento partita -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="drawerPartita" aria-labelledby="drawerPartitaLabel">
+  <div class="offcanvas-header">
+    <h5 id="drawerPartitaLabel">Aggiungi Partita</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <form [formGroup]="partitaForm" (ngSubmit)="aggiungiPartita()">
+      <div class="mb-3">
+        <label>Partecipanti</label>
+        <select multiple class="form-select" formControlName="partecipanti">
+          <option *ngFor="let utente of utentiDisponibili" [value]="utente">{{ utente }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label>Vincitore</label>
+        <select class="form-select" formControlName="vincitore">
+          <option *ngFor="let utente of partitaForm.value.partecipanti" [value]="utente">
+            {{ utente }}
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label>Tempo di gioco (minuti)</label>
+        <input type="number" class="form-control" formControlName="tempo" />
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">Aggiungi</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<div class="container mt-5">
+  <h2>Programmazione Eventi Futuri</h2>
+
+  <!-- Sezione 1: Inserimento evento -->
+  <div class="card mb-5">
+    <div class="card-header bg-primary text-white">Nuovo Evento</div>
+    <div class="card-body">
+      <form [formGroup]="eventoForm" (ngSubmit)="aggiungiEvento()">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Nome Evento</label>
+            <input formControlName="nome" type="text" class="form-control" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Luogo</label>
+            <input formControlName="luogo" type="text" class="form-control" />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Descrizione</label>
+          <textarea formControlName="descrizione" class="form-control"></textarea>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Data Evento</label>
+            <input formControlName="data" type="date" class="form-control" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Orario</label>
+            <select formControlName="orario" class="form-select">
+              <option value="">Seleziona...</option>
+              <option value="Mattina">Mattina</option>
+              <option value="Pomeriggio">Pomeriggio</option>
+              <option value="Sera">Sera</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-success" type="submit">Aggiungi Evento</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sezione 2: Calendario eventi -->
+  <div class="card">
+    <div class="card-header bg-dark text-white">Calendario Eventi</div>
+    <div class="card-body">
+      <div *ngIf="eventi.length === 0">
+        <p class="text-muted">Nessun evento programmato.</p>
+      </div>
+
+      <ul class="list-group" *ngIf="eventi.length > 0">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+          *ngFor="let evento of eventi"
+          (click)="apriDettagli(evento)"
+          style="cursor: pointer"
+        >
+          <div>
+            <strong>{{ evento.nome }}</strong>
+            <div class="text-muted small">
+              {{ evento.data }} - {{ evento.orario }}
+            </div>
+          </div>
+          <span
+  class="badge"
+  [ngClass]="{
+    'bg-success': !eventoScaduto(evento.data),
+    'bg-danger': eventoScaduto(evento.data)
+  }"
+>
+  {{ eventoScaduto(evento.data) ? 'Scaduto' : 'In Corso' }}
+</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Modale Dettagli Evento -->
+<div class="modal fade" id="eventoModal" tabindex="-1" aria-labelledby="eventoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventoModalLabel">{{ eventoSelezionato?.nome }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Luogo:</strong> {{ eventoSelezionato?.luogo }}</p>
+        <p><strong>Data:</strong> {{ eventoSelezionato?.data }}</p>
+        <p><strong>Orario:</strong> {{ eventoSelezionato?.orario }}</p>
+        <p><strong>Descrizione:</strong></p>
+        <p>{{ eventoSelezionato?.descrizione }}</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>
