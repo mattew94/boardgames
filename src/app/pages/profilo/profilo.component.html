@@ -1,6 +1,46 @@
 <div class="container mt-5">
   <h2>Il Mio Profilo</h2>
 
+  <div class="accordion mt-4 mb-4" id="accordionAmici">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingAmici">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAmici" aria-expanded="true" aria-controls="collapseAmici">
+          Lista Amici
+        </button>
+      </h2>
+      <div id="collapseAmici" class="accordion-collapse collapse show" aria-labelledby="headingAmici" data-bs-parent="#accordionAmici">
+        <div class="accordion-body">
+          <div class="row g-3">
+            <div class="col-md-6 col-lg-4" *ngFor="let amico of amici">
+              <div class="card d-flex align-items-center p-3">
+                <div class="d-flex align-items-center gap-3 w-100">
+                  <!-- Avatar -->
+                  <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" style="width: 48px; height: 48px; font-weight: bold;">
+                    {{ amico.nome.charAt(0).toUpperCase() }}
+                  </div>
+  
+                  <!-- Nome -->
+                  <div class="flex-grow-1">
+                    <h6 class="mb-0">{{ amico.nome }}</h6>
+                  </div>
+  
+                  <!-- Icona delete -->
+                  <button class="btn p-0 border-0 bg-transparent" (click)="confermaRimozione(amico)" title="Rimuovi amico">
+                    <i class="bi bi-trash-fill fs-5"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <p *ngIf="amici.length === 0" class="text-muted text-center mt-3">
+            Nessun amico presente.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Accordion che contiene il form -->
   <div class="accordion" id="accordionForm">
     <div class="accordion-item">
@@ -161,3 +201,22 @@
     </div>
   </div>
 </div>
+
+  <!-- Modale conferma eliminazione -->
+  <div class="modal fade" id="modalConfermaEliminazione" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Conferma eliminazione</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Vuoi davvero rimuovere <strong>{{ amicoDaRimuovere?.nome }}</strong> dai tuoi amici?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+          <button type="button" class="btn btn-danger" (click)="rimuoviAmico()">Elimina</button>
+        </div>
+      </div>
+    </div>
+  </div>

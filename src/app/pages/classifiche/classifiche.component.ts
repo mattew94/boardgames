@@ -70,7 +70,10 @@ export class ClassificheComponent {
 
     this.partitaForm.reset({ partecipanti: [], vincitore: '', tempo: 0 });
     // Chiudi drawer
-    const drawer = document.getElementById('drawerPartita');
-    if (drawer) new bootstrap.Offcanvas(drawer).hide();
+    const drawerEl = document.getElementById('drawerPartita');
+if (drawerEl) {
+  const drawerInstance = bootstrap.Offcanvas.getInstance(drawerEl);
+  drawerInstance?.hide();
+}
   }
 }

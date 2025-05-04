@@ -31,6 +31,14 @@ export class ProfiloComponent {
   filtroForm: FormGroup;
   giocoSelezionato: any = null;
 
+  amici = [
+    { id: 1, nome: 'Luca' },
+    { id: 2, nome: 'Giulia' },
+    { id: 3, nome: 'Paolo' }
+  ];
+
+  amicoDaRimuovere: any = null;
+
   constructor(private fb: FormBuilder) {
     this.giocoForm = this.fb.group({
       nome: ['', Validators.required],
@@ -47,6 +55,21 @@ export class ProfiloComponent {
       partecipantiMin: [''],
       partecipantiMax: ['']
     });
+  }
+
+
+  confermaRimozione(amico: any) {
+    this.amicoDaRimuovere = amico;
+    const modalEl = document.getElementById('modalConfermaEliminazione');
+    if (modalEl) new bootstrap.Modal(modalEl).show();
+  }
+
+  rimuoviAmico() {
+    if (!this.amicoDaRimuovere) return;
+    this.amici = this.amici.filter(a => a.id !== this.amicoDaRimuovere.id);
+    const modalEl = document.getElementById('modalConfermaEliminazione');
+    if (modalEl) bootstrap.Modal.getInstance(modalEl)?.hide();
+    this.amicoDaRimuovere = null;
   }
 
 apriConfermaEliminazione(gioco: any) {
