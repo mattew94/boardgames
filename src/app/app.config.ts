@@ -1,6 +1,6 @@
 import {
   ApplicationConfig,
-  provideExperimentalZonelessChangeDetection,
+  provideExperimentalZonelessChangeDetection, isDevMode,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -9,9 +9,14 @@ import { provideHttpClient } from '@angular/common/http';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: true,
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
     provideExperimentalZonelessChangeDetection(),
     provideHttpClient() /* TODO: poi aggiungere gli interceptor al suo interno -> withInterceptors([httpInterceptor]) */,
     provideRouter(routes), 
@@ -28,7 +33,10 @@ export const appConfig: ApplicationConfig = {
       })), 
       provideAuth(() => getAuth()), 
       provideFirestore(() => 
-      getFirestore()),
+      getFirestore()), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          }),
     /* 
     TODO: aggiungere quando creerò lo store
     provideStore(),
