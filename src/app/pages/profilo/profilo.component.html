@@ -61,25 +61,103 @@
     </div>
   </div>
 
-  <div *ngIf="giochi.length > 0; else nessunGioco">
-    <ul class="list-group">
-      <li *ngFor="let gioco of giochi" class="list-group-item d-flex justify-content-between align-items-center">
-        <div>
-          <h5 class="mb-1">{{ gioco.nome }}</h5>
-          <small>{{ gioco.descrizione }}</small><br>
-          <small>Partecipanti: {{ gioco.partecipantiMin }} - {{ gioco.partecipantiMax }}</small><br>
-          <small>Durata: {{ gioco.durata }} minuti</small><br>
-          <small>Genere: {{ gioco.genere }}</small>
-        </div>
-        <div>
-          <button class="btn btn-sm btn-warning me-2" (click)="modificaGioco(gioco)">Modifica</button>
-          <button class="btn btn-sm btn-danger" (click)="eliminaGioco(gioco.id)">Elimina</button>
-        </div>
-      </li>
-    </ul>
+<!-- Contenitore tabella + pulsante -->
+<div class="border rounded overflow-hidden mt-4 mb-5" *ngIf="giochi.length > 0; else nessunGioco">
+  <!-- Riga con pulsante di filtro -->
+  <div class="d-flex justify-content-end align-items-center px-3 py-2 border-bottom bg-dark text-white">
+    <button class="btn btn-primary" (click)="apriDrawer()">Filtra Giochi</button>
   </div>
 
-  <ng-template #nessunGioco>
-    <p class="text-muted mt-5">Nessun gioco aggiunto.</p>
-  </ng-template>
+  <!-- Tabella -->
+  <div class="table-responsive" style="overflow-x: auto;">
+    <table class="table table-bordered align-middle mb-0" style="min-width: 800px;">
+      <thead class="table-dark">
+        <tr>
+          <th>Nome</th>
+          <th>Descrizione</th>
+          <th>Genere</th>
+          <th>Partecipanti</th>
+          <th>Durata (min)</th>
+          <th class="text-center bg-dark" style="position: sticky; right: 0; z-index: 10;">Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let gioco of giochi">
+          <td>{{ gioco.nome }}</td>
+          <td>{{ gioco.descrizione }}</td>
+          <td>{{ gioco.genere }}</td>
+          <td>{{ gioco.partecipantiMin }} - {{ gioco.partecipantiMax }}</td>
+          <td>{{ gioco.durata }}</td>
+          <td class="text-center bg-white" style="position: sticky; right: 0; z-index: 10;">
+            <i class="bi bi-pencil-fill text-warning me-2 cursor-pointer" (click)="modificaGioco(gioco)"></i>
+            <i class="bi bi-trash-fill text-danger cursor-pointer" (click)="apriConfermaEliminazione(gioco)"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #nessunGioco>
+  <p class="text-muted mt-5">Nessun gioco aggiunto.</p>
+</ng-template>
+</div>
+
+<!-- Drawer laterale -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="drawerFiltri" aria-labelledby="drawerLabel">
+  <div class="offcanvas-header">
+    <h5 id="drawerLabel">Filtra Giochi</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <form [formGroup]="filtroForm" (ngSubmit)="applicaFiltri()">
+      <div class="mb-3">
+        <label class="form-label">Nome</label>
+        <input type="text" formControlName="nome" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Genere</label>
+        <select formControlName="genere" class="form-select">
+          <option value="">Tutti</option>
+          <option value="strategia">Strategia</option>
+          <option value="party">Party</option>
+          <option value="familiare">Familiare</option>
+          <option value="avventura">Avventura</option>
+          <option value="altro">Altro</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Partecipanti (minimi)</label>
+        <input type="number" formControlName="partecipantiMin" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Partecipanti (massimi)</label>
+        <input type="number" formControlName="partecipantiMax" class="form-control" />
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Applica</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modale di conferma eliminazione -->
+<div class="modal fade" id="confermaEliminazioneModal" tabindex="-1" aria-labelledby="confermaEliminazioneLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confermaEliminazioneLabel">Conferma Eliminazione</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+      </div>
+      <div class="modal-body">
+        Sei sicuro di voler eliminare il gioco "<strong>{{ giocoSelezionato?.nome }}</strong>"?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <button type="button" class="btn btn-danger" (click)="confermaEliminazione()">Elimina</button>
+      </div>
+    </div>
+  </div>
 </div>

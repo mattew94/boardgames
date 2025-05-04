@@ -28,6 +28,9 @@ export class ProfiloComponent {
   isEditing: boolean = false;
   editingId: number | null = null;
 
+  filtroForm: FormGroup;
+  giocoSelezionato: any = null;
+
   constructor(private fb: FormBuilder) {
     this.giocoForm = this.fb.group({
       nome: ['', Validators.required],
@@ -37,7 +40,32 @@ export class ProfiloComponent {
       durata: [30, [Validators.required, Validators.min(1)]], // durata in minuti
       genere: ['', Validators.required]
     });
+
+    this.filtroForm = this.fb.group({
+      nome: [''],
+      genere: [''],
+      partecipantiMin: [''],
+      partecipantiMax: ['']
+    });
   }
+
+apriConfermaEliminazione(gioco: any) {
+  this.giocoSelezionato = gioco;
+  const modalEl = document.getElementById('confermaEliminazioneModal');
+  const bsModal = new bootstrap.Modal(modalEl);
+  bsModal.show();
+}
+
+confermaEliminazione() {
+  if (this.giocoSelezionato) {
+    this.eliminaGioco(this.giocoSelezionato.id);
+    this.giocoSelezionato = null;
+
+    const modalEl = document.getElementById('confermaEliminazioneModal');
+    const bsModal = bootstrap.Modal.getInstance(modalEl);
+    bsModal.hide();
+  }
+}
 
   aggiungiGioco() {
     if (this.giocoForm.invalid) return;
@@ -99,5 +127,24 @@ export class ProfiloComponent {
     this.giocoForm.reset();
     this.isEditing = false;
     this.editingId = null;
+  }
+
+  apriDrawer() {
+    const drawerElement = document.getElementById('drawerFiltri');
+    const bsDrawer = new bootstrap.Offcanvas(drawerElement);
+    bsDrawer.show();
+  }
+
+  applicaFiltri() {
+    const filtri = this.filtroForm.value;
+    const giochiOriginali = this.giochi;
+  
+  
+    this.giochi = giochiOriginali.filter((g: any) => {
+      return (!filtri.nome || g.nome.toLowerCase().includes(filtri.nome.toLowerCase())) &&
+             (!filtri.genere || g.genere === filtri.genere) &&
+             (!filtri.partecipantiMin || g.partecipantiMin >= +filtri.partecipantiMin) &&
+             (!filtri.partecipantiMax || g.partecipantiMax <= +filtri.partecipantiMax);
+    });
   }
 }
