@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://boardgames-api.onrender.com'
+  apiUrl: 'https://boardgames-api-pxhh.onrender.com'
 };
