@@ -52,6 +52,9 @@
           </li>
           @if(authService.isLoggedIn) {
             <li class="nav-item" (click)="isCollapsed = true">
+              <a class="nav-link cursor-pointer" (click)="goTo('profilo')">Il mio Profilo</a>
+            </li>
+            <li class="nav-item" (click)="isCollapsed = true">
               <a class="nav-link" routerLink="/utenti">Utenti</a>
             </li>
             <!-- <li class="nav-item" (click)="isCollapsed = true">
@@ -85,6 +88,9 @@
         <a class="nav-link" routerLink="/home">Home</a>
       </li>
       @if(authService.isLoggedIn) {
+        <li class="nav-item" (click)="isCollapsed = true">
+              <a class="nav-link cursor-pointer" (click)="goTo('profilo')">Il mio Profilo</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/utenti">Utenti</a>
         </li>
