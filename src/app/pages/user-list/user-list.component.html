@@ -1,28 +1,7 @@
-<!-- <div class="container mt-5">
-  @if(users()[0]?.utenti.length) {
-    @for(user of users()[0].utenti; track $index) {
-      <div class="user-container mb-5 relative">
-        <div class="d-flex h-100" (click)="openDropdownUser($index)">
-          <div class="bg-primary border-bg-left"></div>
-          <p class="ps-3 d-flex m-0 align-items-center user-name">{{ user.name }}</p>
-        </div>
-        <div [class]="'absolute user-'+$index" [ngClass]="isOpenUserDropdown[$index] ? 'd-block' : 'd-none'">
-          <ul>
-            @for(game of user.games; track $index) {
-              <li>{{ game.name}}</li>
-            }
-          </ul>
-        </div>
-      </div>
-    }
-  }
-</div> -->
-
 <div class="container mt-5">
-  <h2>Lista Utenti e Giochi</h2>
-
+  <h2>Lista Amici e Giochi</h2>
   <div class="accordion" id="accordionUtenti">
-    <div class="accordion-item" *ngFor="let utente of utenti; let i = index">
+    <div class="accordion-item" *ngFor="let utente of utenti(); let i = index">
       <h2 class="accordion-header" [id]="'heading' + i">
         <button
           class="accordion-button collapsed"
@@ -32,7 +11,7 @@
           aria-expanded="false"
           [attr.aria-controls]="'collapse' + i"
         >
-          {{ utente.nome }}
+          {{ utente.nome | titlecase }}
         </button>
       </h2>
       <div
@@ -64,11 +43,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let gioco of utente.giochi">
-          <td>{{ gioco.nome }}</td>
-          <td>{{ gioco.descrizione }}</td>
+          <td>{{ gioco.name }}</td>
+         <!--  <td>{{ gioco.descrizione }}</td>
           <td>{{ gioco.genere }}</td>
           <td>{{ gioco.partecipantiMin }} - {{ gioco.partecipantiMax }}</td>
-          <td>{{ gioco.durata }}</td>
+          <td>{{ gioco.durata }}</td> -->
         </tr>
       </tbody>
     </table>

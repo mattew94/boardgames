@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 declare var bootstrap: any;
 
@@ -19,17 +19,18 @@ export class ProgrammazioneComponent {
   
     constructor(private fb: FormBuilder) {
       this.eventoForm = this.fb.group({
-        nome: [''],
-        descrizione: [''],
-        luogo: [''],
-        data: [''],
-        orario: ['']
+        nome: ['', Validators.required],
+        descrizione: ['', Validators.required],
+        luogo: ['', Validators.required],
+        data: ['', Validators.required],
+        orario: ['', Validators.required]
       });
     }
   
     aggiungiEvento() {
       if (this.eventoForm.valid) {
         this.eventi.push(this.eventoForm.value);
+        
         this.eventoForm.reset();
       }
     }

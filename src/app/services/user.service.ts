@@ -1,21 +1,29 @@
-import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, doc, getDocs } from '@angular/fire/firestore';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { IResponseCurrentUserGames, IResponseFriendsGames } from '../models/user.model';
+import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+
 
 @Injectable()
 export class UserService {
-  constructor(private firestore: Firestore) {}
+  private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl;
 
-  // Metodo per recuperare gli utenti dalla raccolta 'utenti'
-  getUsers(): Observable<any[]> {
-    const usersCollection = collection(this.firestore, 'users'); // Nome della raccolta
-    return collectionData(usersCollection);
-  }
+  //docData: lettura della collection
+  //setDoc: scrittura che sovrascrive l'intera collection
+  //updateDoc: scrittura che non sovrascrive l'intera collection ma aggiorna solo alcuni campi
 
-  // Metodo per recuperare utenti (alternativa senza Observable)
-  async fetchUsers() {
-    const usersCollection = collection(this.firestore, 'users');
-    const snapshot = await getDocs(usersCollection);
-    return snapshot.docs.map(doc => doc.data());
+  getFriendsWithGames(userId: string): Observable<IResponseFriendsGames[]> {
+  return this.http.get<IResponseFriendsGames[]>(`${this.apiUrl}/usersFriendship/${userId}`);
+}
+
+  getCurrentUserGames(userId: string): Observable<IResponseCurrentUserGames[]> {
+  return this.http.get<IResponseCurrentUserGames[]>(`${this.apiUrl}/currentUserGames/${userId}`);
+}
+
+
+  addNewGame(body: any): Observable<any> {    
+    return this.http.post(`${this.apiUrl}/addNewGame`, body)
   }
 }

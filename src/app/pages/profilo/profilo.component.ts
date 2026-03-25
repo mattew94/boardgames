@@ -1,29 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { IResponseCurrentUserGames } from '../../models/user.model';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 declare var bootstrap: any;
-
-interface Gioco {
-  id: number;
-  nome: string;
-  descrizione: string;
-  partecipantiMin: number;
-  partecipantiMax: number;
-  durata: number;
-  genere: string;
-}
 
 @Component({
   selector: 'app-profilo',
   templateUrl: './profilo.component.html',
   styleUrls: ['./profilo.component.scss'],
   imports: [CommonModule, ReactiveFormsModule, NgbCollapseModule],
+  providers: [UserService],
   standalone: true
 })
 export class ProfiloComponent {
-  giochi: Gioco[] = [];
+  authService = inject(AuthService);
+  userService = inject(UserService);
+  giochi: WritableSignal<IResponseCurrentUserGames[]> = signal([]);
   giocoForm: FormGroup;
   isEditing: boolean = false;
   editingId: number | null = null;
@@ -41,22 +37,25 @@ export class ProfiloComponent {
 
   constructor(private fb: FormBuilder) {
     this.giocoForm = this.fb.group({
-      nome: ['', Validators.required],
-      descrizione: ['', Validators.required],
-      partecipantiMin: [2, [Validators.required, Validators.min(1)]],
-      partecipantiMax: [4, [Validators.required, Validators.min(1)]],
-      durata: [30, [Validators.required, Validators.min(1)]], // durata in minuti
-      genere: ['', Validators.required]
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      min_players: [2, [Validators.required, Validators.min(1)]],
+      max_players: [4, [Validators.required, Validators.min(1)]],
+      duration: [30, [Validators.required, Validators.min(1)]], // durata in minuti
+      genre: ['', Validators.required]
     });
 
     this.filtroForm = this.fb.group({
-      nome: [''],
-      genere: [''],
-      partecipantiMin: [''],
-      partecipantiMax: ['']
+      name: [''],
+      genre: [''],
+      min_players: [''],
+      max_players: ['']
     });
   }
 
+  ngOnInit() {
+    this.userService.getCurrentUserGames(this.authService.getCurrentUserId()).subscribe((res: IResponseCurrentUserGames[]) => this.giochi.set(res))
+  }
 
   confermaRimozione(amico: any) {
     this.amicoDaRimuovere = amico;
@@ -92,8 +91,17 @@ confermaEliminazione() {
 
   aggiungiGioco() {
     if (this.giocoForm.invalid) return;
+    
+    this.userService.addNewGame({ userId: this.authService.getCurrentUserId(), ...this.giocoForm.getRawValue()})
+      .subscribe(res => {
+        if(res.message === "Game added") {
+              this.userService.getCurrentUserGames(this.authService.getCurrentUserId()).subscribe((res: IResponseCurrentUserGames[]) => this.giochi.set(res))
+              this.giocoForm.reset();
+        }
+      });
+    
 
-    if (this.isEditing && this.editingId !== null) {
+    /* if (this.isEditing && this.editingId !== null) {
       // Modifica
       const index = this.giochi.findIndex(g => g.id === this.editingId);
       if (index > -1) {
@@ -114,19 +122,45 @@ confermaEliminazione() {
     }
 
     this.giocoForm.reset();
+    if (this.giocoForm.invalid) return;
+
+  if (this.isEditing && this.editingId !== null) {
+    const index = this.giochi().findIndex(g => g.id === this.editingId);
+    if (index > -1) {
+      const giocoEsistente = this.giochi()[index];
+      this.giochi()[index] = {
+        id: this.editingId,
+        ...this.giocoForm.value,
+        owners: giocoEsistente.owners
+      };
+    }
+    this.isEditing = false;
+    this.editingId = null;
+  } */ 
+ 
+    /* 
+  TODO: rivedere questa logica
+  else {
+    const nuovoGioco: Gioco = {
+      id: Date.now(),
+      ...this.giocoForm.value,
+      owners: [this.authService.getCurrentUser()] // <-- o quello che serve
+    };
+    this.giochi.push(nuovoGioco);
+  } */
   }
 
-  modificaGioco(gioco: Gioco) {
+  modificaGioco(gioco: IResponseCurrentUserGames) {
     this.giocoForm.setValue({
-      nome: gioco.nome,
-      descrizione: gioco.descrizione,
-      partecipantiMin: gioco.partecipantiMin,
-      partecipantiMax: gioco.partecipantiMax,
-      durata: gioco.durata,
-      genere: gioco.genere,
+      name: gioco.name,
+      description: gioco.description,
+      min_players: gioco.min_players,
+      max_players: gioco.max_players,
+      duration: gioco.duration,
+      genre: gioco.genre,
     });
     this.isEditing = true;
-    this.editingId = gioco.id;
+    /* this.editingId = gioco.id; */
 
     const collapseElement = document.getElementById('collapseForm');
   if (collapseElement && !collapseElement.classList.contains('show')) {
@@ -138,12 +172,13 @@ confermaEliminazione() {
   }
 
   eliminaGioco(id: number) {
-    this.giochi = this.giochi.filter(g => g.id !== id);
+    /* TODO: rivedere anche questa logica */
+    /* this.giochi().filter(g => g.id !== id);
     if (this.editingId === id) {
       this.giocoForm.reset();
       this.isEditing = false;
       this.editingId = null;
-    }
+    } */
   }
 
   annullaModifica() {
@@ -162,12 +197,12 @@ confermaEliminazione() {
     const filtri = this.filtroForm.value;
     const giochiOriginali = this.giochi;
   
-  
-    this.giochi = giochiOriginali.filter((g: any) => {
+  /* TODO: rivedere questa logica */
+    /* this.giochi = giochiOriginali.filter((g: any) => {
       return (!filtri.nome || g.nome.toLowerCase().includes(filtri.nome.toLowerCase())) &&
              (!filtri.genere || g.genere === filtri.genere) &&
              (!filtri.partecipantiMin || g.partecipantiMin >= +filtri.partecipantiMin) &&
              (!filtri.partecipantiMax || g.partecipantiMax <= +filtri.partecipantiMax);
-    });
+    }); */
   }
 }

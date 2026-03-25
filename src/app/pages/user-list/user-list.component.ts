@@ -1,67 +1,12 @@
-/* import { Component, OnInit, signal, Signal } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { CommonModule } from '@angular/common';
-
-@Component({
-  selector: 'app-user-list',
-  templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.scss'],
-  standalone: true,
-  imports: [CommonModule],
-  providers: [UserService],
-})
-export class GameListComponent implements OnInit {
-  users = signal([] as any);
-  isOpenUserDropdown: boolean[] = [];
-
-  constructor(private userService: UserService) {}
-
-  ngOnInit() {
-    this.userService.getUsers().subscribe((data) => {
-      console.log(data);
-      
-      this.users.set(data);
-      this.users()[0].utenti.forEach((el: any) => {
-        this.isOpenUserDropdown.push(false)
-      });
-    });
-  }
-
-  openDropdownUser(indexDropdown: number) {
-    this.isOpenUserDropdown = [...this.isOpenUserDropdown.map((isOpen, index) => {
-      if(indexDropdown === index) {        
-        return !isOpen
-      } else {
-        return isOpen
-      }
-    })];
-
-
-  }
-}
- */
-
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { IResponseFriendsGames, Utente } from '../../models/user.model';
+import { AuthService } from '../../services/auth.service';
 
 declare var bootstrap: any;
-
-interface Gioco {
-  nome: string;
-  descrizione: string;
-  partecipantiMin: number;
-  partecipantiMax: number;
-  durata: number;
-  genere: string;
-}
-
-interface Utente {
-  id: number;
-  nome: string;
-  giochi: Gioco[];
-}
 
 @Component({
   selector: 'app-user-list',
@@ -72,19 +17,10 @@ interface Utente {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class UserListComponent {
-  utenti = [
-    {
-      nome: 'Mario Rossi',
-      giochi: [
-        { nome: 'Catan', descrizione: 'Un gioco di strategia', genere: 'strategia', durata: 60, partecipantiMin: 3, partecipantiMax: 4 },
-        { nome: 'Dixit', descrizione: 'Gioco creativo', genere: 'party', durata: 30, partecipantiMin: 3, partecipantiMax: 6 }
-      ]
-    },
-    {
-      nome: 'Lucia Bianchi',
-      giochi: []
-    }
-  ];
+  private userService = inject(UserService);
+  private authService = inject(AuthService);
+
+  utenti: WritableSignal<Utente[]> = signal([]);
 
   filtroForm: FormGroup;
   utenteCorrente: any;
@@ -96,6 +32,11 @@ export class UserListComponent {
       partecipantiMin: [''],
       partecipantiMax: ['']
     });
+  }
+
+  ngOnInit() {
+    this.userService.getFriendsWithGames(this.authService.getCurrentUserId()).subscribe(res => this.mapUsersAndGamesList(res))
+    /* this.userService.getUserAndBoardgamesList().subscribe(res => this.mapUsersAndGamesList(res)) */
   }
   
   apriDrawer(utente: any) {
@@ -118,6 +59,61 @@ export class UserListComponent {
              (!filtri.partecipantiMin || g.partecipantiMin >= +filtri.partecipantiMin) &&
              (!filtri.partecipantiMax || g.partecipantiMax <= +filtri.partecipantiMax);
     });
+  }
+
+  mapUsersAndGamesList(friendsList: IResponseFriendsGames[]) {
+  friendsList.forEach(list => {
+    this.utenti.set([
+      ...this.utenti(),
+      {
+      nome: list.display_name,
+      giochi: list.games
+    }])
+  })
+
+  console.log(this.utenti());
+  
+  /* const listaGiochi = response;
+  const mappaUtenti = new Map<string, Gioco[]>();
+  
+  for (const gioco of listaGiochi) {
+    const {
+      game,
+      description,
+      type,
+      duration,
+      players,
+      owners,
+    } = gioco;
+
+    const [min, max] = players.split('/').map(Number);
+
+    const giocoDettaglio: Gioco = {
+      nome: game,
+      descrizione: description,
+      genere: type,
+      durata: duration,
+      partecipantiMin: min,
+      partecipantiMax: max,
+    };
+
+    owners.forEach((owner: string) => {
+      if (!mappaUtenti.has(owner)) {
+        mappaUtenti.set(owner, []);
+      }
+      mappaUtenti.get(owner)?.push(giocoDettaglio);
+    });
+  }
+
+  // Converti la mappa in array finale
+  const utenti: Utente[] = Array.from(mappaUtenti.entries()).map(
+    ([nome, giochi]) => ({
+      nome,
+      giochi,
+    })
+  );
+
+  this.utenti.set(utenti); */
   }
   
 }

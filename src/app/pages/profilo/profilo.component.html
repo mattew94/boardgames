@@ -1,7 +1,8 @@
 <div class="container mt-5">
   <h2>Il Mio Profilo</h2>
 
-  <div class="accordion mt-4 mb-4" id="accordionAmici">
+  <!-- TODO: lista amici - implementare in futuro -->
+  <!-- <div class="accordion mt-4 mb-4" id="accordionAmici">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingAmici">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAmici" aria-expanded="true" aria-controls="collapseAmici">
@@ -14,17 +15,17 @@
             <div class="col-md-6 col-lg-4" *ngFor="let amico of amici">
               <div class="card d-flex align-items-center p-3">
                 <div class="d-flex align-items-center gap-3 w-100">
-                  <!-- Avatar -->
+                  
                   <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" style="width: 48px; height: 48px; font-weight: bold;">
                     {{ amico.nome.charAt(0).toUpperCase() }}
                   </div>
   
-                  <!-- Nome -->
+                 
                   <div class="flex-grow-1">
                     <h6 class="mb-0">{{ amico.nome }}</h6>
                   </div>
   
-                  <!-- Icona delete -->
+                  
                   <button class="btn p-0 border-0 bg-transparent" (click)="confermaRimozione(amico)" title="Rimuovi amico">
                     <i class="bi bi-trash-fill fs-5"></i>
                   </button>
@@ -39,7 +40,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- Accordion che contiene il form -->
   <div class="accordion" id="accordionForm">
@@ -55,33 +56,33 @@
           <form [formGroup]="giocoForm" (ngSubmit)="aggiungiGioco()" class="mb-4">
             <div class="mb-3">
               <label for="nome" class="form-label">Nome gioco</label>
-              <input id="nome" type="text" formControlName="nome" class="form-control" />
+              <input id="nome" type="text" formControlName="name" class="form-control" />
             </div>
 
             <div class="mb-3">
               <label for="descrizione" class="form-label">Descrizione del gioco</label>
-              <textarea id="descrizione" formControlName="descrizione" class="form-control"></textarea>
+              <textarea id="descrizione" formControlName="description" class="form-control"></textarea>
             </div>
 
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="partecipantiMin" class="form-label">Partecipanti Minimi</label>
-                <input id="partecipantiMin" type="number" formControlName="partecipantiMin" class="form-control" />
+                <input id="partecipantiMin" type="number" formControlName="min_players" class="form-control" />
               </div>
               <div class="col-md-6 mb-3">
                 <label for="partecipantiMax" class="form-label">Partecipanti Massimi</label>
-                <input id="partecipantiMax" type="number" formControlName="partecipantiMax" class="form-control" />
+                <input id="partecipantiMax" type="number" formControlName="max_players" class="form-control" />
               </div>
             </div>
 
             <div class="mb-3">
               <label for="durata" class="form-label">Durata del gioco (minuti)</label>
-              <input id="durata" type="number" formControlName="durata" class="form-control" />
+              <input id="durata" type="number" formControlName="duration" class="form-control" />
             </div>
 
             <div class="mb-3">
               <label for="genere" class="form-label">Genere del gioco</label>
-              <select id="genere" formControlName="genere" class="form-select">
+              <select id="genere" formControlName="genre" class="form-select">
                 <option value="">Seleziona genere</option>
                 <option value="strategia">Strategia</option>
                 <option value="familiare">Familiare</option>
@@ -102,7 +103,7 @@
   </div>
 
 <!-- Contenitore tabella + pulsante -->
-<div class="border rounded overflow-hidden mt-4 mb-5" *ngIf="giochi.length > 0; else nessunGioco">
+<div class="border rounded overflow-hidden mt-4 mb-5" *ngIf="giochi().length > 0; else nessunGioco">
   <!-- Riga con pulsante di filtro -->
   <div class="d-flex justify-content-end align-items-center px-3 py-2 border-bottom bg-dark text-white">
     <button class="btn btn-primary" (click)="apriDrawer()">Filtra Giochi</button>
@@ -122,14 +123,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let gioco of giochi">
-          <td>{{ gioco.nome }}</td>
-          <td>{{ gioco.descrizione }}</td>
-          <td>{{ gioco.genere }}</td>
-          <td>{{ gioco.partecipantiMin }} - {{ gioco.partecipantiMax }}</td>
-          <td>{{ gioco.durata }}</td>
+        <tr *ngFor="let gioco of giochi()">
+          <td>{{ gioco.name }}</td>
+          <td>{{ gioco.description || '-' }}</td>
+          <td>{{ gioco.genre || '-' }}</td>
+          <td>{{ gioco.min_players }} - {{ gioco.max_players }}</td>
+          <td>{{ gioco.duration || '-'}}</td>
           <td class="text-center bg-white" style="position: sticky; right: 0; z-index: 10;">
-            <i class="bi bi-pencil-fill text-warning me-2 cursor-pointer" (click)="modificaGioco(gioco)"></i>
+            <!-- <i class="bi bi-pencil-fill text-warning me-2 cursor-pointer" (click)="modificaGioco(gioco)"></i> -->
             <i class="bi bi-trash-fill text-danger cursor-pointer" (click)="apriConfermaEliminazione(gioco)"></i>
           </td>
         </tr>
@@ -153,12 +154,12 @@
     <form [formGroup]="filtroForm" (ngSubmit)="applicaFiltri()">
       <div class="mb-3">
         <label class="form-label">Nome</label>
-        <input type="text" formControlName="nome" class="form-control" />
+        <input type="text" formControlName="name" class="form-control" />
       </div>
 
       <div class="mb-3">
         <label class="form-label">Genere</label>
-        <select formControlName="genere" class="form-select">
+        <select formControlName="genre" class="form-select">
           <option value="">Tutti</option>
           <option value="strategia">Strategia</option>
           <option value="party">Party</option>
@@ -170,12 +171,12 @@
 
       <div class="mb-3">
         <label class="form-label">Partecipanti (minimi)</label>
-        <input type="number" formControlName="partecipantiMin" class="form-control" />
+        <input type="number" formControlName="min_players" class="form-control" />
       </div>
 
       <div class="mb-3">
         <label class="form-label">Partecipanti (massimi)</label>
-        <input type="number" formControlName="partecipantiMax" class="form-control" />
+        <input type="number" formControlName="max_players" class="form-control" />
       </div>
 
       <button type="submit" class="btn btn-primary w-100">Applica</button>
