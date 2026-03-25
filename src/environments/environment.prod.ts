@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.tuosito.com' //da verificare in futuro
+  apiUrl: 'https://boardgames-api.onrender.com'
 };
