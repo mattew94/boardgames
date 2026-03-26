@@ -25,15 +25,15 @@ export class LoginComponent {
 
   onSubmit(): void {
     const { username, password } = this.loginForm.value;
-  
-    this.#authService.login(username, password).subscribe(user => {            
-      if (user) {       
-        localStorage.setItem('user', JSON.stringify(user.display_name));
-        localStorage.setItem('userId', JSON.stringify(user.id));
-        this.#router.navigate(['home'])
-      } else {
-        this.error = 'Credenziali errate';
-      }
-    });
+
+  this.#authService.login(username, password).subscribe({
+    next: (res: any) => {
+      this.#authService.saveSession(res);
+      this.#router.navigate(['home']);
+    },
+    error: () => {
+      this.error = 'Credenziali errate';
+    }
+  });
   }
 }

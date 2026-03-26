@@ -115,7 +115,7 @@
       <thead class="table-dark">
         <tr>
           <th>Nome</th>
-          <th>Descrizione</th>
+          <!-- <th>Descrizione</th> -->
           <th>Genere</th>
           <th>Partecipanti</th>
           <th>Durata (min)</th>
@@ -125,7 +125,7 @@
       <tbody>
         <tr *ngFor="let gioco of giochi()">
           <td>{{ gioco.name }}</td>
-          <td>{{ gioco.description || '-' }}</td>
+          <!-- <td>{{ gioco.description || '-' }}</td> -->
           <td>{{ gioco.genre || '-' }}</td>
           <td>{{ gioco.min_players }} - {{ gioco.max_players }}</td>
           <td>{{ gioco.duration || '-'}}</td>

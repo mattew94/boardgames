@@ -9,8 +9,9 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
-  _isLoggedIn = signal(!!localStorage.getItem('user'));
-  username = new BehaviorSubject(localStorage.getItem('user')?.slice(1,-1))
+  private _isLoggedIn = signal(!!localStorage.getItem('token'));
+  user = new BehaviorSubject<any>(this.getCurrentUser());
+  //username = new BehaviorSubject(localStorage.getItem('user')?.slice(1,-1))
 
   get isLoggedIn() {
     return this._isLoggedIn()
@@ -22,34 +23,29 @@ export class AuthService {
   
   constructor(private firestore: Firestore) {}
 
-    login(username: string, password: string): Observable<any> {
-      return this.http.get(`${this.apiUrl}/users`).pipe(
-        map((data: any) => {
-          if (!data) return false;  
-          const isLoggedIn = data.some((user: any) =>
-            {              
-              if(user.username === username && user.password_hash === password) {                
-                this.isLoggedIn = true  
-                this.username.next(user.id);             
-              }
-              return user.username === username && user.password_hash === password
-            }
-          );
-          if(isLoggedIn) {
-            return data.find((user: any) => user.username === username)
-          }
-        })
-        
-      );
-    }
+    login(username: string, password: string) {
+    return this.http.post(`${this.apiUrl}/login`, { username, password });
+  }
 
-    getCurrentUser(): any | null {
-      const userJson = localStorage.getItem('user');      
-      return userJson ? JSON.parse(userJson) : null;
-    }
+  saveSession(data: any) {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    this.user.next(data.user);
+    this._isLoggedIn.set(true);
+  }
 
-    getCurrentUserId(): any | null {
-      const userJson = localStorage.getItem('userId');      
-      return userJson ? JSON.parse(userJson) : null;
-    }
+    getToken() {
+    return localStorage.getItem('token');
+  }
+
+  getCurrentUser() {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  }
+
+  logout() {
+    localStorage.clear();
+    this._isLoggedIn.set(false);
+    this.user.next(null);
+  }
 }

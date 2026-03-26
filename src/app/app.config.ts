@@ -5,11 +5,12 @@ import {
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideServiceWorker } from '@angular/service-worker';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,7 +19,7 @@ export const appConfig: ApplicationConfig = {
       registrationStrategy: 'registerWhenStable:30000',
     }),
     provideExperimentalZonelessChangeDetection(),
-    provideHttpClient() /* TODO: poi aggiungere gli interceptor al suo interno -> withInterceptors([httpInterceptor]) */,
+    provideHttpClient(withInterceptors([authInterceptor])) /* TODO: poi aggiungere gli interceptor al suo interno -> withInterceptors([httpInterceptor]) */,
     provideRouter(routes), 
     provideFirebaseApp(() => initializeApp(
       {

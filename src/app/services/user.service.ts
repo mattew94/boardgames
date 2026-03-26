@@ -14,12 +14,12 @@ export class UserService {
   //setDoc: scrittura che sovrascrive l'intera collection
   //updateDoc: scrittura che non sovrascrive l'intera collection ma aggiorna solo alcuni campi
 
-  getFriendsWithGames(userId: string): Observable<IResponseFriendsGames[]> {
-  return this.http.get<IResponseFriendsGames[]>(`${this.apiUrl}/usersFriendship/${userId}`);
+  getFriendsWithGames(): Observable<IResponseFriendsGames[]> {
+  return this.http.get<IResponseFriendsGames[]>(`${this.apiUrl}/usersFriendship`);
 }
 
-  getCurrentUserGames(userId: string): Observable<IResponseCurrentUserGames[]> {
-  return this.http.get<IResponseCurrentUserGames[]>(`${this.apiUrl}/currentUserGames/${userId}`);
+  getCurrentUserGames(): Observable<IResponseCurrentUserGames[]> {
+  return this.http.get<IResponseCurrentUserGames[]>(`${this.apiUrl}/currentUserGames`);
 }
 
 

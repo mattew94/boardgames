@@ -16,16 +16,21 @@ export class AppComponent  {
   #router = inject(Router)
   isCollapsed = true;
   title = 'boardgames';
-  currentUser = this.authService.getCurrentUser()
+  currentUser = this.authService.getCurrentUser();
+
+  ngOnInit() {
+    this.authService.user.subscribe(user => {
+    this.currentUser = user;
+  });
+  }
+
+logOut() {
+  this.authService.logout();
+  this.#router.navigate(['login']);
+  this.isCollapsed = true
+}
 
   goTo(path: string) {
     this.#router.navigate([path+'/'+ this.authService.getCurrentUser()])    
-  }
-
-  logOut() {
-    this.isCollapsed = true;
-    localStorage.clear();
-    this.#router.navigate(['login']);
-    this.authService.isLoggedIn = false
   }
 }

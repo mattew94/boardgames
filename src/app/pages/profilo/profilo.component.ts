@@ -54,7 +54,7 @@ export class ProfiloComponent {
   }
 
   ngOnInit() {
-    this.userService.getCurrentUserGames(this.authService.getCurrentUserId()).subscribe((res: IResponseCurrentUserGames[]) => this.giochi.set(res))
+    this.userService.getCurrentUserGames().subscribe((res: IResponseCurrentUserGames[]) => this.giochi.set(res))
   }
 
   confermaRimozione(amico: any) {
@@ -92,10 +92,10 @@ confermaEliminazione() {
   aggiungiGioco() {
     if (this.giocoForm.invalid) return;
     
-    this.userService.addNewGame({ userId: this.authService.getCurrentUserId(), ...this.giocoForm.getRawValue()})
+    this.userService.addNewGame({ ...this.giocoForm.getRawValue()})
       .subscribe(res => {
         if(res.message === "Game added") {
-              this.userService.getCurrentUserGames(this.authService.getCurrentUserId()).subscribe((res: IResponseCurrentUserGames[]) => this.giochi.set(res))
+              this.userService.getCurrentUserGames().subscribe((res: IResponseCurrentUserGames[]) => this.giochi.set(res))
               this.giocoForm.reset();
         }
       });

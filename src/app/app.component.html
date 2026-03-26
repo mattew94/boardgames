@@ -18,13 +18,13 @@
       @if(authService.isLoggedIn && currentUser) {
         <div class="d-flex align-items-center text-white gap-2 pe-4 d-block d-lg-none container-avatar" (click)="goTo('profilo')">
           <img
-          [src]="'https://ui-avatars.com/api/?name=' + currentUser + '&background=495fff&color=fff&rounded=true'"
+          [src]="'https://ui-avatars.com/api/?name=' + currentUser.display_name + '&background=495fff&color=fff&rounded=true'"
             class="rounded-circle"
             width="32"
             height="32"
             alt="Avatar"
           />
-          <span class=" d-sm-inline" >{{ currentUser }}</span>
+          <span class=" d-sm-inline" >{{ currentUser.display_name }}</span>
         </div>
       }
       <button
@@ -109,13 +109,13 @@
     @if(authService.isLoggedIn) {
       <div class="d-flex align-items-center text-white gap-2 container-avatar" (click)="goTo('profilo')">
         <img
-          [src]="'https://ui-avatars.com/api/?name=' + currentUser + '&background=495fff&color=fff&rounded=true'"
+          [src]="'https://ui-avatars.com/api/?name=' + currentUser.display_name + '&background=495fff&color=fff&rounded=true'"
           class="rounded-circle"
           width="32"
           height="32"
           alt="Avatar"
         />
-        <span class="d-sm-inline">{{ currentUser }}</span>
+        <span class="d-sm-inline">{{ currentUser.display_name }}</span>
       </div>
     }
   </div>

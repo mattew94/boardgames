@@ -35,8 +35,7 @@ export class UserListComponent {
   }
 
   ngOnInit() {
-    this.userService.getFriendsWithGames(this.authService.getCurrentUserId()).subscribe(res => this.mapUsersAndGamesList(res))
-    /* this.userService.getUserAndBoardgamesList().subscribe(res => this.mapUsersAndGamesList(res)) */
+    this.userService.getFriendsWithGames().subscribe(res => this.mapUsersAndGamesList(res))
   }
   
   apriDrawer(utente: any) {
