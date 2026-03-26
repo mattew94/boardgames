@@ -1,9 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Firestore, docData } from '@angular/fire/firestore';
-import { BehaviorSubject, map, Observable } from 'rxjs';
-import { doc } from 'firebase/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -11,7 +11,20 @@ export class AuthService {
   private apiUrl = environment.apiUrl;
   private _isLoggedIn = signal(!!localStorage.getItem('token'));
   user = new BehaviorSubject<any>(this.getCurrentUser());
-  //username = new BehaviorSubject(localStorage.getItem('user')?.slice(1,-1))
+
+checkTokenExpiration() {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+
+  const decoded: any = jwtDecode(token);
+
+  const exp = decoded.exp * 1000;
+  const now = Date.now();
+
+  if (now > exp) {
+    this.logout();
+  }
+}
 
   get isLoggedIn() {
     return this._isLoggedIn()

@@ -64,7 +64,7 @@
               <a class="nav-link" routerLink="/classifiche">Classifiche</a>
             </li>
             <li class="nav-item" (click)="logOut()">
-              <a class="nav-link" routerLink="/classifiche">Log Out</a>
+              <a class="nav-link">Log Out</a>
             </li>
           } @else {
             <li class="nav-item" (click)="isCollapsed = true">
@@ -88,7 +88,7 @@
         <a class="nav-link" routerLink="/home">Home</a>
       </li>
       @if(authService.isLoggedIn) {
-        <li class="nav-item" (click)="isCollapsed = true">
+        <li class="nav-item" style="cursor:pointer" (click)="isCollapsed = true">
               <a class="nav-link cursor-pointer" (click)="goTo('profilo')">Il mio Profilo</a>
         </li>
         <li class="nav-item">
@@ -99,6 +99,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/classifiche">Classifiche</a>
+        </li>
+        <li class="nav-item cursor-pointer" style="cursor: pointer" (click)="logOut()">
+          <a class="nav-link cursor-pointer">Log Out</a>
         </li>
       } @else {
         <li class="nav-item">

@@ -72,6 +72,8 @@ export class ProfiloComponent {
   }
 
 apriConfermaEliminazione(gioco: any) {
+  console.log(gioco);
+  
   this.giocoSelezionato = gioco;
   const modalEl = document.getElementById('confermaEliminazioneModal');
   const bsModal = new bootstrap.Modal(modalEl);
@@ -79,10 +81,8 @@ apriConfermaEliminazione(gioco: any) {
 }
 
 confermaEliminazione() {
-  if (this.giocoSelezionato) {
+  if (this.giocoSelezionato.id) {
     this.eliminaGioco(this.giocoSelezionato.id);
-    this.giocoSelezionato = null;
-
     const modalEl = document.getElementById('confermaEliminazioneModal');
     const bsModal = bootstrap.Modal.getInstance(modalEl);
     bsModal.hide();
@@ -171,14 +171,13 @@ confermaEliminazione() {
   }
   }
 
-  eliminaGioco(id: number) {
-    /* TODO: rivedere anche questa logica */
-    /* this.giochi().filter(g => g.id !== id);
-    if (this.editingId === id) {
-      this.giocoForm.reset();
-      this.isEditing = false;
-      this.editingId = null;
-    } */
+  eliminaGioco(id: string) {
+    this.userService.removeGameFromCurrentUser(id).subscribe(res => {
+      if(res.message === "Game removed") {
+        this.giocoSelezionato = null;
+        this.userService.getCurrentUserGames().subscribe((res: IResponseCurrentUserGames[]) => this.giochi.set(res))
+      }
+    })
   }
 
   annullaModifica() {

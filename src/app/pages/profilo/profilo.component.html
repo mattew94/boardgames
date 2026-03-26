@@ -46,11 +46,11 @@
   <div class="accordion" id="accordionForm">
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingForm">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseForm" aria-expanded="true" aria-controls="collapseForm">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseForm" aria-expanded="true" aria-controls="collapseForm">
           Aggiungi o Modifica Gioco
         </button>
       </h2>
-      <div id="collapseForm" class="accordion-collapse collapse show" aria-labelledby="headingForm" data-bs-parent="#accordionForm">
+      <div id="collapseForm" class="accordion-collapse collapse" aria-labelledby="headingForm" data-bs-parent="#accordionForm">
         <div class="accordion-body">
           <!-- Form -->
           <form [formGroup]="giocoForm" (ngSubmit)="aggiungiGioco()" class="mb-4">
@@ -193,7 +193,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
       </div>
       <div class="modal-body">
-        Sei sicuro di voler eliminare il gioco "<strong>{{ giocoSelezionato?.nome }}</strong>"?
+        Sei sicuro di voler eliminare il gioco "<strong>{{ giocoSelezionato?.name }}</strong>"?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>

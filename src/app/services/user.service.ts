@@ -22,8 +22,11 @@ export class UserService {
   return this.http.get<IResponseCurrentUserGames[]>(`${this.apiUrl}/currentUserGames`);
 }
 
-
   addNewGame(body: any): Observable<any> {    
     return this.http.post(`${this.apiUrl}/addNewGame`, body)
+  }
+
+  removeGameFromCurrentUser(idGame: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/deleteGame/${idGame}`)
   }
 }

@@ -37,5 +37,9 @@ export interface IResponseCurrentUserGames {
 
 export interface IGames {
   id: string;
-  name: string
+  name: string;
+  genre: string;
+  min_players: string;
+  duration: number;
+  max_players: string
 }

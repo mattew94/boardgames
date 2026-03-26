@@ -31,6 +31,6 @@ logOut() {
 }
 
   goTo(path: string) {
-    this.#router.navigate([path+'/'+ this.authService.getCurrentUser()])    
+    this.#router.navigate([path+'/'+ this.authService.getCurrentUser().display_name.toLowerCase()])    
   }
 }
